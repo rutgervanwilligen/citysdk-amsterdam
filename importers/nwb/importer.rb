@@ -19,6 +19,7 @@ api.set_layer layer
 
 DB = Sequel.connect("postgres://postgres:postgres@localhost/citysdk-ndw")
 
+# TODO: add more columns - house letters, etc.
 columns = [
   :wvk_id,
   :stt_naam,
@@ -32,6 +33,8 @@ columns = [
   :baansubsrt
 ]
 
+i = 0
+
 query = <<SQL
   SELECT
     #{columns.map{ |c| c.to_s }.join(",")},
@@ -41,7 +44,6 @@ query = <<SQL
     wegvakken;
 SQL
 
-i = 0
 begin
   DB[query].each do |row|
     # Convert BigDecimal to int
