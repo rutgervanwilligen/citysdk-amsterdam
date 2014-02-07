@@ -19,6 +19,8 @@ api.set_layer layer
 
 DB = Sequel.connect("postgres://postgres:postgres@localhost/citysdk-ndw")
 
+i = 0
+
 query = <<SQL
   SELECT
     wvk_id
@@ -26,7 +28,6 @@ query = <<SQL
     wegvakken;
 SQL
 
-i = 0
 begin
   DB[query].each do |row|
     # Convert BigDecimal to int
