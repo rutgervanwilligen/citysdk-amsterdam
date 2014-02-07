@@ -15,7 +15,7 @@ class CitySDK_Services < Sinatra::Base
       id = json["id"]
             
       # TODO: naming convention!
-      key = "oplaadpalen!!!#{id}"      
+      key = "oplaadpalen!!!#{id}"
       data = CitySDK_Services.memcache_get(key)
       if data
         json["availability"] = data
