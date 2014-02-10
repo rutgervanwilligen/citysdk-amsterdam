@@ -17,7 +17,7 @@ class CitySDK_Services < Sinatra::Base
       c.use Faraday::Adapter::NetHttp
     end
     
-    resp = httpget(connection, SCK_PATH + "#{@json['sensorid']}/posts.json")
+    resp = httpget(connection, SCK_PATH + "#{json['sensorid']}/posts.json")
     if resp.status == 200
       h = JSON.parse(resp.body)
       json['update'] = h['device']['posts'][0]['insert_datetime']
