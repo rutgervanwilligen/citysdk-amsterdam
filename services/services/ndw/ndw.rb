@@ -9,7 +9,7 @@ class CitySDK_Services < Sinatra::Base
     wvk_id = json["wvk_id"]
     
     # TODO: naming convention!
-    key = "ndw!!!#{id}"
+    key = "ndw!!!#{wvk_id}"
     data = CitySDK_Services.memcache_get(key)
     
     if data
