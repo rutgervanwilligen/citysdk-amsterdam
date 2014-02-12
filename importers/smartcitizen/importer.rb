@@ -12,32 +12,44 @@ passw = ARGV[1] || (pw ? pw[email]  : nil) || ''
 host  = ARGV[2] || (pw ? pw['host']  : nil) || 'api.dev'
 
 layer = "sck"
-sensors = JSON.parse(File.read('sensors.json'))
+devices = JSON.parse(File.read('devices.json'))
 
 api = CitySDK::API.new("api.citysdk.waag.org")
 api.authenticate(email, passw)
 api.set_layer layer
 
 begin
-  sensors.each do |sensor_id|
-    response = Faraday.get SCK_URL + SCK_PATH + "#{sensor_id}/posts.json"
-    device = JSON.parse(response.body)["device"]  
-    node = {
-      id: device["id"],
-      name: device["title"],
-      geom: {
-        type: "Point",
-        coordinates: [
-          device["geo_long"].to_f,
-          device["geo_lat"].to_f
-        ]
-      },
-      data: {
-        sensorid: device["id"].to_i
+  devices.each do |device|
+    response = Faraday.get SCK_URL + SCK_PATH + "#{device["id"]}/posts.json"
+    
+    api_device = JSON.parse(response.body)["device"]
+
+    node = {}
+    if device.has_key? "cdk_id"
+      node = {
+        cdk_id: device["cdk_id"],        
+        data: {
+          sensorid: api_device["id"].to_i
+        }
       }
-    }
+    else    
+      node = {
+        id: api_device["id"],
+        name: api_device["title"],
+        geom: {
+          type: "Point",
+          coordinates: [
+            api_device["geo_long"].to_f,
+            api_device["geo_lat"].to_f
+          ]
+        },
+        data: {
+          sensorid: api_device["id"].to_i
+        }
+      }
+    end
     puts "creating node for sensor #{device["id"]}: \"#{device["title"]}\""
-    puts api.delete "/#{layer}.#{device["id"]}/#{layer}"    
+    api.delete "/#{layer}.#{device["id"]}/#{layer}"    
     api.create_node node
   end
 ensure
