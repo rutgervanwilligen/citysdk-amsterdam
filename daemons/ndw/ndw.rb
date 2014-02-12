@@ -9,7 +9,12 @@ require 'dalli'
 DB = Sequel.connect('postgres://localhost/ndw?user=postgres&password=postgres')
 DC = Dalli::Client.new('localhost:11211')
 
-path = "ftp://83.247.110.3/trafficspeed.gz"
+NDW_PATH = "ftp://83.247.110.3/trafficspeed.gz"
+
+MST_WVK = {}
+DB[:mst_wvk].each do |row|
+  MST_WVK[row[:mst_id]] = row[:wvk_id]
+end  
 
 class TrafficSpeed < ::Ox::Sax
   
@@ -24,10 +29,10 @@ class TrafficSpeed < ::Ox::Sax
   
   def end_element(name)
     @elements.pop
-    if name == :siteMeasurements
-      
-      wvk_id = DB['SELECT wvk_id FROM mst_wvk WHERE mst_id = ?', @data[:id]].get(1)
-      if wvk_id
+    if name == :siteMeasurements      
+      if MST_WVK.has_key? @data[:id]
+        wvk_id = MST_WVK[@data[:id]]
+        
         # TODO: naming convention!
         key = "ndw!!!#{wvk_id}"
         memdata = DC.get(key)
@@ -100,9 +105,12 @@ end
 
 handler = TrafficSpeed.new
 
-open(path) do |f|
-  file = Zlib::GzipReader.open(f)
-  Ox.sax_parse(handler, file)
+loop do 
+  open(NDW_PATH) do |f|
+    file = Zlib::GzipReader.open(f)
+    Ox.sax_parse(handler, file)
+  end
+  sleep(60 * 2)
 end
 
 
