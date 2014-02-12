@@ -15,7 +15,7 @@
         id = json["id"]
     
         connection = Faraday.new "http://service.org"
-        response = self.httpget(connection, "/api/#{id}")
+        response = self.httpget(connection, "/api/#{id}?key=#{KEY}")
         
         if response.status == 200
           
