@@ -11,6 +11,8 @@ DC = Dalli::Client.new('localhost:11211')
 
 NDW_PATH = "ftp://83.247.110.3/trafficspeed.gz"
 
+WAIT = 60 * 2
+
 MST_WVK = {}
 DB[:mst_wvk].each do |row|
   MST_WVK[row[:mst_id]] = row[:wvk_id]
@@ -106,11 +108,13 @@ end
 handler = TrafficSpeed.new
 
 loop do 
+  puts "Reading zipped NDW data into memcached..."
   open(NDW_PATH) do |f|
     file = Zlib::GzipReader.open(f)
     Ox.sax_parse(handler, file)
   end
-  sleep(60 * 2)
+  puts "Done... time for sleep (#{WAIT} seconds)!"
+  sleep(WAIT)
 end
 
 
