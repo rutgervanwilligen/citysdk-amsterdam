@@ -109,11 +109,15 @@ handler = TrafficSpeed.new
 
 loop do 
   puts "Reading zipped NDW data into memcached..."
-  open(NDW_PATH) do |f|
-    file = Zlib::GzipReader.open(f)
-    Ox.sax_parse(handler, file)
+  begin
+    open(NDW_PATH) do |f|
+      file = Zlib::GzipReader.open(f)
+      Ox.sax_parse(handler, file)
+    end  
+    puts "Done... time for sleep (#{WAIT} seconds)!"
+  rescue Exception => msg 
+    puts msg
   end
-  puts "Done... time for sleep (#{WAIT} seconds)!"
   sleep(WAIT)
 end
 
