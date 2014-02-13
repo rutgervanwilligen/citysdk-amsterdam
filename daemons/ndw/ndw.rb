@@ -115,8 +115,8 @@ loop do
       Ox.sax_parse(handler, file)
     end  
     puts "Done... time for sleep (#{WAIT} seconds)!"
-  rescue Exception => msg 
-    puts msg
+  rescue Exception => e
+    puts e
   end
   sleep(WAIT)
 end
