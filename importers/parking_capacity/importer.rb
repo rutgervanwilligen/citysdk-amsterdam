@@ -15,39 +15,25 @@ layer = "divv.parking.capacity"
 api = CitySDK::API.new("api.citysdk.waag.org")
 api.authenticate(email, passw)
 api.set_layer layer
-api.set_createTemplate({
-  create: {
-    params: {
-      srid: 28992,
-      create_type: "create"
-    }
-  } 
-})
 
 begin
   response = Faraday.get PARKING_HOST + PARKING_PATH
-  # Current version of parking JSON is invalid:
-  # "key"="value" instead of "key": "value"
-  garages = JSON.parse response.body #.gsub(/\"=\"/, '": "')
+  garages = JSON.parse response.body
   garages["features"].each do |garage|
-
-    puts garage.inspect
-    # node = {
-    #   id: device["id"],
-    #   name: device["title"],
-    #   geom: {
-    #     type: "Point",
-    #     coordinates: [
-    #       device["geo_long"].to_f,
-    #       device["geo_lat"].to_f
-    #     ]
-    #   },
-    #   data: {
-    #     sensorid: device["id"].to_i
-    #   }
-    # }
-    puts "creating node for sensor #{device["id"]}: \"#{device["title"]}\""
-    #api.create_node node
+    id = garage["Id"]
+    geom = garage["geometry"]    
+    name = garage["properties"]["Name"]
+    
+    node = {
+      id: id,
+      name: name,
+      geom: geom,
+      data: {
+        id: id
+      }
+    }    
+    puts "Creating node for parking garage \"#{name}\""
+    api.create_node node
   end
 ensure
 	api.release
