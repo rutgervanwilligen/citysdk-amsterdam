@@ -13,7 +13,7 @@ class CitySDK_Services < Sinatra::Base
     data = CitySDK_Services.memcache_get(key)
     
     if data
-      json = json.merge(data) 
+      json[:msts] = data.values
     end    
         
     return { 
