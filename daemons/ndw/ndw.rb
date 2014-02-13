@@ -61,12 +61,16 @@ class TrafficSpeed < ::Ox::Sax
         if not @data.has_key? :values
           @data[:values] = []
         end        
-        @data[:values] << {
-          index: value.to_i
-        }
+        @data[:values] << {}
       end  
     when :basicData      
-      @data[:values][-1][:type] = value
+      puts value.inspect
+      case value
+      when "TrafficFlow"
+        @data[:values][-1][:type] = :flow
+      when "TrafficSpeed"
+        @data[:values][-1][:type] = :speed
+      end
     end
   end
   
