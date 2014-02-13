@@ -63,8 +63,7 @@ class TrafficSpeed < ::Ox::Sax
         end        
         @data[:values] << {}
       end  
-    when :basicData      
-      puts value.inspect
+    when :basicData
       case value
       when "TrafficFlow"
         @data[:values][-1][:type] = :flow
