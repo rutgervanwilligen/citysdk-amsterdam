@@ -23,7 +23,7 @@ begin
     id = garage["Id"]
     geom = garage["geometry"]    
     name = garage["properties"]["Name"]
-    
+
     node = {
       id: id,
       name: name,
@@ -32,6 +32,7 @@ begin
         id: id
       }
     }    
+
     puts "Creating node for parking garage \"#{name}\""
     api.create_node node
   end
