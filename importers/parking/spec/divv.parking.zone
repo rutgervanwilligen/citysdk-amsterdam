@@ -1,0 +1,60 @@
+{
+	"cdk_id": "divv.parking.zone.t12a",
+	"geom": {
+			type: "MultiPolygon",
+      			coordinates: [[[
+			[
+				4.940291886867838,
+				52.32085762615938
+			],
+			[
+				4.945607801327776,
+				52.322671765026655
+			],
+			//etc
+	
+			]]]
+		},
+		"name": "Tariefcode 02 (4,00)",
+		"node_type": "node",
+		"layers": {
+			"divv.parking.zone.price": {
+				"data": {
+					"tarief1": {
+						"cost": "4,00",
+						"days": "ma-za",
+						"time": "900-2400"
+					}
+				}
+			},
+			//mapped by hand, as follows:
+			/*
+				T11A, T12A, T12B, T12B //kans-centrum
+				T13C, T13C, T13B, T13B, T13B //kans-woon	
+			*/
+			"divv.parking.zone.chance": {
+				"data": {
+					"workday": {
+						"0": "93",
+						"1": "91",
+						"2": "91"
+							//etc
+					},
+					"saturday": {
+						"0": "93",
+						"1": "91",
+						"2": "91"
+							//etc
+					},
+					"sunday":
+					{
+						"0": "93",
+						"1": "91",
+						"2": "91"
+							//etc
+					}
+				}
+			}
+		},
+		"layer": "divv.parking.zone"
+}

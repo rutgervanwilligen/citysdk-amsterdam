@@ -1,0 +1,1 @@
+{ opening_times : {default : [{days : "0-6" , open_in : "0000", open_out : "0000", close_in : "0000", close_out : "0000"}]} }
