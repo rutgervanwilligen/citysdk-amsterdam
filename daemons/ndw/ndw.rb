@@ -59,11 +59,11 @@ class TrafficSpeed < ::Ox::Sax
         values = @data[:values].zip(mst_wvk[:characteristics]).map do |value, characteristic|          
           {
             type: value[:flow],
-            value: value[:value]
+            value: value[:value],
             accuracy: characteristic[:accuracy],
             period: characteristic[:period],
             lane: characteristic[:lane],
-            vehicleLengths: characteristic[:lengthCharacteristics]
+            vehicleLengths: characteristic[:lengthCharacteristics],
             vehicleType: characteristic[:vehicleType]
           }           
         end
