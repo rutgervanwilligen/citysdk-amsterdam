@@ -34,7 +34,7 @@ SQL
   
 MST_WVK = {}
 DB[SQL].each do |row|
-  row[:characteristics] = JSON.parse(row[:characteristics])
+  row[:characteristics] = JSON.parse(row[:characteristics], {:symbolize_names => true})
   MST_WVK[row[:mst_id]] = row
 end  
 
@@ -56,16 +56,22 @@ class TrafficSpeed < ::Ox::Sax
         mst_wvk = MST_WVK[@data[:id]]
         wvk_id = mst_wvk[:wvk_id]
         
-        values = @data[:values].zip(mst_wvk[:characteristics]).map { |a| a }
+        values = @data[:values].zip(mst_wvk[:characteristics]).map do |value, characteristic|          
+          {
+            type: value[:flow],
+            value: value[:value]
+            accuracy: characteristic[:accuracy],
+            period: characteristic[:period],
+            lane: characteristic[:lane],
+            vehicleLengths: characteristic[:lengthCharacteristics]
+            vehicleType: characteristic[:vehicleType]
+          }           
+        end
         
-        # @data[:values].delete_if do |value|
-        #   case value[:type]
-        #   when :flow
-        #     value[:value] <= 0
-        #   when :speed
-        #     value[:value] <= 0
-        #   end          
-        # end        
+        # Remove entries with invalid values
+        values.delete_if do |value|
+          value[:value] <= 0
+        end        
         
         data = {
           mst_id: mst_wvk[:mst_id],
