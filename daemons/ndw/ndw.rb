@@ -108,9 +108,9 @@ class TrafficSpeed < ::Ox::Sax
     when :measurementTimeDefault
       @data[:time] = value
     when :vehicleFlowRate
-      @data[:values][-1][:flow] = value.to_i
+      @data[:values][-1][:flow] = value.to_i if value.to_i > 0
     when :speed
-      @data[:values][-1][:speed] = value.to_i
+      @data[:values][-1][:speed] = value.to_i if value.to_i > -1
     end
   end
   
