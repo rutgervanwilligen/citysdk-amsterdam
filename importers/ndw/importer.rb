@@ -22,7 +22,7 @@ DB = Sequel.connect("postgres://postgres:postgres@localhost/ndw")
 i = 0
 
 query = <<-SQL
-  SELECT
+  SELECT DISTINCT
     wvk_id
   FROM 
     mst_wvk;
