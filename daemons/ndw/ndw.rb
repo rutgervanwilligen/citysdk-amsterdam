@@ -72,7 +72,7 @@ class TrafficSpeed < ::Ox::Sax
           distance: mst_wvk[:distance],
           geometry: JSON.parse(mst_wvk[:geojson].round_coordinates(6)),
           measurement: {
-            time: @data[:time]
+            time: @data[:time],
             values: @data[:values]
           }
         }
