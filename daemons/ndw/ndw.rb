@@ -16,7 +16,7 @@ WAIT = 60 * 2
 SQL = <<-SQL
   SELECT
     wvk_id, mst.mst_id, mst.name, mst.location::int, carriagewy, 
-    direction, distance, ST_AsGeoJSON(geom)
+    direction, distance::float, ST_AsGeoJSON(geom) AS geojson
   FROM 
     mst_wvk 
   JOIN 
@@ -48,7 +48,16 @@ class TrafficSpeed < ::Ox::Sax
         mst_wvk = MST_WVK[@data[:id]]
         wvk_id = mst_wvk[:wvk_id]
         
-        data = mst_wvk.merge @data
+        data = {
+          mst_id: mst_wvk[:mst_id],
+          name: mst_wvk[:name],
+          vild_location: mst_wvk[:location],
+          carriageway: mst_wvk[:carriagewy],
+          direction: mst_wvk[:direction],
+          distance: mst_wvk[:distance],
+          geometry: JSON.parse(mst_wvk[:geojson]),
+          measurement: @data
+        }
         
         # TODO: naming convention!
         key = "ndw!!!#{wvk_id}"
