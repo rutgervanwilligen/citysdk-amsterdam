@@ -34,6 +34,7 @@ SQL
   
 MST_WVK = {}
 DB[SQL].each do |row|
+  row[:characteristics] = JSON.parse(row[:characteristics])
   MST_WVK[row[:mst_id]] = row
 end  
 
@@ -55,9 +56,7 @@ class TrafficSpeed < ::Ox::Sax
         mst_wvk = MST_WVK[@data[:id]]
         wvk_id = mst_wvk[:wvk_id]
         
-        #values = @data[:values].zip(mst_wvk[:characteristics]).map { |a| a }
-        
-
+        values = @data[:values].zip(mst_wvk[:characteristics]).map { |a| a }
         
         # @data[:values].delete_if do |value|
         #   case value[:type]
@@ -81,7 +80,7 @@ class TrafficSpeed < ::Ox::Sax
           geometry: JSON.parse(mst_wvk[:geojson].round_coordinates(6)),
           measurement: {
             time: @data[:time],
-            values: mst_wvk[:characteristics]
+            values: values
           }
         }
                 
