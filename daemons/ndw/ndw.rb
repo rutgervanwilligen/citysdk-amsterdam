@@ -13,9 +13,21 @@ NDW_PATH = "ftp://83.247.110.3/trafficspeed.gz"
 
 WAIT = 60 * 2
 
+SQL = <<-SQL
+  SELECT
+    wvk_id, mst.mst_id, mst.name, mst.location::int, carriagewy, 
+    direction, distance, ST_AsGeoJSON(geom)
+  FROM 
+    mst_wvk 
+  JOIN 
+    mst
+  ON 
+    mst_wvk.mst_id = mst.mst_id;
+SQL
+  
 MST_WVK = {}
-DB[:mst_wvk].each do |row|
-  MST_WVK[row[:mst_id]] = row[:wvk_id]
+DB[SQL].each do |row|
+  MST_WVK[row[:mst_id]] = row
 end  
 
 class TrafficSpeed < ::Ox::Sax
@@ -33,16 +45,19 @@ class TrafficSpeed < ::Ox::Sax
     @elements.pop
     if name == :siteMeasurements      
       if MST_WVK.has_key? @data[:id]
-        wvk_id = MST_WVK[@data[:id]]
+        mst_wvk = MST_WVK[@data[:id]]
+        wvk_id = mst_wvk[:wvk_id]
+        
+        data = mst_wvk.merge @data
         
         # TODO: naming convention!
         key = "ndw!!!#{wvk_id}"
         memdata = DC.get(key)
         if memdata
-          memdata[@data[:id]] = @data
+          memdata[@data[:id]] = data
           DC.set(key, memdata)
         else
-          DC.set(key, {@data[:id] => @data})
+          DC.set(key, {@data[:id] => data})
         end        
       end    
       
