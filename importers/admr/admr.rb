@@ -1,8 +1,3 @@
-# We've downloaded three files, municipalitoes, provinces and the national border.
-# They are (in this case) zipped shape files, but the importer should deal with 
-#   other formats as well.
-
-
 require 'citysdk'
 include CitySDK
 
@@ -13,7 +8,7 @@ imp = Importer.new({
       :layername=>"admr", 
       :create_type=>"create", 
       :srid=>"28992",  # dutch RD system
-      :host=>"api.dev", 
+      :host=>"api.dev",
       :email=>'citysdk@waag.org', 
       :passw=>'nix'
       })
