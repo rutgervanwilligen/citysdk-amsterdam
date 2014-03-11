@@ -21,7 +21,8 @@ end
 
 SQL = <<-SQL
   SELECT
-    wvk_id, mst.mst_id, mst.name, mst.location::int, carriageway, 
+    wvk_id, mst.mst_id, mst.name, mst.location::int, carriageway,    
+    method, equipment, lanes, characteristics,
     direction, distance::float, ST_AsGeoJSON(geom) AS geojson
   FROM 
     mst_wvk 
@@ -70,6 +71,9 @@ class TrafficSpeed < ::Ox::Sax
           carriageway: mst_wvk[:carriageway],
           direction: mst_wvk[:direction],
           distance: mst_wvk[:distance],
+          method: mst_wvk[:method],
+          equipment: mst_wvk[:equipment],
+          lanes: mst_wvk[:lanes],
           geometry: JSON.parse(mst_wvk[:geojson].round_coordinates(6)),
           measurement: {
             time: @data[:time],
