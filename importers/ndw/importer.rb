@@ -17,15 +17,15 @@ api = CitySDK::API.new("api.citysdk.waag.org")
 api.authenticate(email, passw)
 api.set_layer layer
 
-DB = Sequel.connect("postgres://postgres:postgres@localhost/citysdk-ndw")
+DB = Sequel.connect("postgres://postgres:postgres@localhost/ndw")
 
 i = 0
 
-query = <<SQL
+query = <<-SQL
   SELECT
     wvk_id
   FROM 
-    wegvakken;
+    mst_wvk;
 SQL
 
 begin
