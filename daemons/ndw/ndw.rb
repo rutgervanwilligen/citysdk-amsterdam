@@ -59,7 +59,7 @@ class TrafficSpeed < ::Ox::Sax
           when :flow
             value[:value] <= 0
           when :speed
-            value[:value] <= -1
+            value[:value] <= 0
           end          
         end        
         
