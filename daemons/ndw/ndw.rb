@@ -55,7 +55,7 @@ class TrafficSpeed < ::Ox::Sax
         mst_wvk = MST_WVK[@data[:id]]
         wvk_id = mst_wvk[:wvk_id]
         
-        values = @data[:values].zip(mst_wvk[:characteristics]).map { |a| a }
+        #values = @data[:values].zip(mst_wvk[:characteristics]).map { |a| a }
         
 
         
@@ -81,7 +81,7 @@ class TrafficSpeed < ::Ox::Sax
           geometry: JSON.parse(mst_wvk[:geojson].round_coordinates(6)),
           measurement: {
             time: @data[:time],
-            values: values
+            values: mst_wvk[:characteristics]
           }
         }
                 
