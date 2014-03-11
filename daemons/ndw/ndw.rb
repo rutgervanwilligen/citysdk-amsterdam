@@ -13,6 +13,12 @@ NDW_PATH = "ftp://83.247.110.3/trafficspeed.gz"
 
 WAIT = 60 * 2
 
+class String
+  def round_coordinates(precision)
+    self.gsub(/(\d+)\.(\d{#{precision}})\d+/, '\1.\2')
+  end
+end
+
 SQL = <<-SQL
   SELECT
     wvk_id, mst.mst_id, mst.name, mst.location::int, carriagewy, 
@@ -55,7 +61,7 @@ class TrafficSpeed < ::Ox::Sax
           carriageway: mst_wvk[:carriagewy],
           direction: mst_wvk[:direction],
           distance: mst_wvk[:distance],
-          geometry: JSON.parse(mst_wvk[:geojson]),
+          geometry: JSON.parse(mst_wvk[:geojson].round_coordinates(6)),
           measurement: @data
         }
         
