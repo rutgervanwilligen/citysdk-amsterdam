@@ -57,9 +57,9 @@ class TrafficSpeed < ::Ox::Sax
         @data[:values].delete_if do |value|
           case value[:type]
           when :flow
-            value[:value] > 0
+            value[:value] < 0
           when :speed
-            value[:value] > -1
+            value[:value] < -1
           end          
         end        
         
