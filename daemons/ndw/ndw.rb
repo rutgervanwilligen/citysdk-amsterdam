@@ -57,15 +57,18 @@ class TrafficSpeed < ::Ox::Sax
         wvk_id = mst_wvk[:wvk_id]
         
         values = @data[:values].zip(mst_wvk[:characteristics]).map do |value, characteristic|          
-          {
-            type: value[:flow],
+          h = {
+            type: value[:type],
             value: value[:value],
             accuracy: characteristic[:accuracy],
             period: characteristic[:period],
             lane: characteristic[:lane],
-            vehicleLengths: characteristic[:lengthCharacteristics],
-            vehicleType: characteristic[:vehicleType]
-          }           
+          }
+          
+          h[:vehicleLengths] = characteristic[:lengthCharacteristics] if characteristic.has_key? :lengthCharacteristics
+          h[:vehicleType] = characteristic[:vehicleType] if characteristic.has_key? :vehicleType
+          
+          h
         end
         
         # Remove entries with invalid values
