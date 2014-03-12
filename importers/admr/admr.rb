@@ -32,14 +32,14 @@ end
 
 # Provinces
 imp = Importer.new({
-      :file_path=> 'provincies.zip', 
-      :name =>'provincien',
-      :host => host, 
-      :layername => layer, 
-      :create_type => 'create', 
-      :srid => '28992', 
-      :email => email, 
-      :passw =>passw
+  :file_path => 'provincies.zip', 
+  :name =>'provincien',
+  :host => host, 
+  :layername => layer, 
+  :create_type => 'create', 
+  :srid => '28992', 
+  :email => email, 
+  :passw =>passw
 })
       
 imp.doImport() do |d|
