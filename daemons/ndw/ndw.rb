@@ -65,7 +65,7 @@ class TrafficSpeed < ::Ox::Sax
             lane: characteristic[:lane],
           }
           
-          h[:vehicleLengths] = characteristic[:lengthCharacteristics] if characteristic.has_key? :lengthCharacteristics
+          h[:vehicleLength] = characteristic[:lengthCharacteristics].map { |l| l.values } if characteristic.has_key? :lengthCharacteristics
           h[:vehicleType] = characteristic[:vehicleType] if characteristic.has_key? :vehicleType
           
           h
